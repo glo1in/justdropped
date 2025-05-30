@@ -111,4 +111,146 @@ class SneakerScraper:
                     "website": "StockX"
                 },
                 {
-                    "brand": 
+                    "brand": "Off-White",
+                    "name": "Off-White x Nike Dunk Low 'Pine Green'",
+                    "price": "$2,200",
+                    "release_date": "2024-02-05",
+                    "image_url": "https://images.stockx.com/images/Nike-Dunk-Low-Off-White-Pine-Green.jpg?fit=fill&bg=FFFFFF&w=700&h=500&fm=webp&auto=compress&q=90&dpr=2&trim=color&updated_at=1638316684",
+                    "website": "StockX"
+                }
+            ]
+            self.releases.extend(stockx_releases)
+            print(f"✅ Found {len(stockx_releases)} StockX releases")
+        except Exception as e:
+            print(f"❌ Error scraping StockX: {e}")
+    
+    def scrape_goat(self):
+        """Scrape GOAT for upcoming releases"""
+        print("🔍 Scraping GOAT...")
+        try:
+            # Simulating GOAT data
+            goat_releases = [
+                {
+                    "brand": "New Balance",
+                    "name": "New Balance 550 'White Green'",
+                    "price": "$110",
+                    "release_date": "2024-02-08",
+                    "image_url": "https://image.goat.com/attachments/product_template_pictures/images/008/654/900/original/550_White_Green.png",
+                    "website": "GOAT"
+                },
+                {
+                    "brand": "Converse",
+                    "name": "Converse Chuck 70 High 'Comme des Garçons'",
+                    "price": "$150",
+                    "release_date": "2024-02-10",
+                    "image_url": "https://image.goat.com/attachments/product_template_pictures/images/008/654/901/original/Chuck_70_CDG.png",
+                    "website": "GOAT"
+                }
+            ]
+            self.releases.extend(goat_releases)
+            print(f"✅ Found {len(goat_releases)} GOAT releases")
+        except Exception as e:
+            print(f"❌ Error scraping GOAT: {e}")
+    
+    def format_release_date(self, date_str):
+        """Format release date for better readability"""
+        try:
+            date_obj = datetime.strptime(date_str, "%Y-%m-%d")
+            return date_obj.strftime("%B %d, %Y")
+        except:
+            return date_str
+    
+    def sort_releases_by_date(self):
+        """Sort releases by release date"""
+        try:
+            self.releases.sort(key=lambda x: datetime.strptime(x['release_date'], "%Y-%m-%d"))
+        except:
+            pass
+    
+    def display_releases(self):
+        """Display all scraped releases in a formatted way"""
+        print("\n" + "="*80)
+        print("🔥 UPCOMING SNEAKER RELEASES 🔥")
+        print("="*80)
+        
+        if not self.releases:
+            print("No releases found.")
+            return
+        
+        self.sort_releases_by_date()
+        
+        for i, release in enumerate(self.releases, 1):
+            print(f"\n{i}. {release['name']}")
+            print(f"   Brand: {release['brand']}")
+            print(f"   Price: {release['price']}")
+            print(f"   Release Date: {self.format_release_date(release['release_date'])}")
+            print(f"   Website: {release['website']}")
+            print(f"   Image: {release['image_url'][:60]}...")
+            print("-" * 60)
+    
+    def save_to_json(self, filename="sneaker_releases.json"):
+        """Save releases to JSON file"""
+        try:
+            with open(filename, 'w') as f:
+                json.dump(self.releases, f, indent=2)
+            print(f"\n💾 Data saved to {filename}")
+        except Exception as e:
+            print(f"❌ Error saving to JSON: {e}")
+    
+    def get_release_stats(self):
+        """Display statistics about the scraped releases"""
+        if not self.releases:
+            return
+        
+        print(f"\n📊 RELEASE STATISTICS")
+        print(f"Total releases found: {len(self.releases)}")
+        
+        # Count by brand
+        brands = {}
+        websites = {}
+        
+        for release in self.releases:
+            brand = release['brand']
+            website = release['website']
+            
+            brands[brand] = brands.get(brand, 0) + 1
+            websites[website] = websites.get(website, 0) + 1
+        
+        print(f"\nReleases by brand:")
+        for brand, count in sorted(brands.items()):
+            print(f"  {brand}: {count}")
+        
+        print(f"\nReleases by website:")
+        for website, count in sorted(websites.items()):
+            print(f"  {website}: {count}")
+    
+    def run_scraper(self):
+        """Run the complete scraping process"""
+        print("🚀 Starting sneaker release scraper...")
+        print("Note: This is a demonstration with simulated data.")
+        print("Real scraping would require handling dynamic content, APIs, and anti-bot measures.\n")
+        
+        # Scrape all websites
+        self.scrape_nike_snkrs()
+        time.sleep(1)  # Be respectful with requests
+        
+        self.scrape_adidas()
+        time.sleep(1)
+        
+        self.scrape_footlocker()
+        time.sleep(1)
+        
+        self.scrape_stockx()
+        time.sleep(1)
+        
+        self.scrape_goat()
+        
+        # Display results
+        self.display_releases()
+        self.get_release_stats()
+        self.save_to_json()
+
+# Run the scraper
+if __name__ == "__main__":
+    scraper = SneakerScraper()
+    scraper.run_scraper()
