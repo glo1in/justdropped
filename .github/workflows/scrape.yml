@@ -25,6 +25,10 @@ jobs:
 
       - name: Run scraper
         run: python scraper/scrape_sneakers.py
+      
+      - name: Move JSON to public folder
+        run: cp top10_drops.json public/top10_drops.json
+
 
       - name: Commit and push changes
         run: |
