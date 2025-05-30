@@ -3,42 +3,39 @@ from bs4 import BeautifulSoup
 import json
 from datetime import datetime
 
-def scrape_sneakernews():
-    URL = "https://sneakernews.com/release-dates/"
-    headers = {"User-Agent": "Mozilla/5.0"}
-    response = requests.get(URL, headers=headers)
-    soup = BeautifulSoup(response.text, "html.parser")
+URL = "https://www.nicekicks.com/release-dates/"
+headers = {"User-Agent": "Mozilla/5.0"}
+response = requests.get(URL, headers=headers)
+soup = BeautifulSoup(response.text, "html.parser")
 
-    drops = []
+drops = []
 
-    for post in soup.select("article"):
-        name_tag = post.select_one("h2.headline a")
-        image_tag = post.select_one("img")
-        date_tag = post.select_one(".release-date")
+for card in soup.select("div.card-release"):
+    try:
+        name_tag = card.select_one(".release-title")
+        link_tag = card.select_one("a")
+        image_tag = card.select_one("img")
+        date_tag = card.select_one(".date")
 
-        if name_tag and image_tag and date_tag:
+        if name_tag and link_tag and image_tag and date_tag:
+            raw_date = date_tag.get_text(strip=True)
             try:
-                release_date = datetime.strptime(date_tag.get_text(strip=True), "%B %d, %Y")
-                drops.append({
-                    "name": name_tag.get_text(strip=True),
-                    "url": name_tag["href"],
-                    "image": image_tag["src"],
-                    "release_date": release_date.isoformat()
-                })
-            except Exception as e:
-                print("Error parsing date:", e)
+                parsed_date = datetime.strptime(raw_date, "%B %d, %Y")
+            except ValueError:
+                continue
 
-    print(f"✅ Scraped {len(drops)} sneaker drops")
-    for drop in drops[:3]:  # preview first 3 entries
-        print(json.dumps(drop, indent=2))
+            drops.append({
+                "name": name_tag.get_text(strip=True),
+                "url": link_tag["href"],
+                "image": image_tag["data-src"] if image_tag.has_attr("data-src") else image_tag["src"],
+                "release_date": parsed_date.isoformat()
+            })
+    except Exception as e:
+        print("❌ Skipping a card due to error:", e)
 
-    return drops
+# Sort and save
+drops.sort(key=lambda x: x["release_date"])
+with open("top10_drops.json", "w") as f:
+    json.dump(drops[:10], f, indent=2)
 
-if __name__ == "__main__":
-    results = scrape_sneakernews()
-    results.sort(key=lambda x: x['release_date'])
-
-    with open("top10_drops.json", "w") as f:
-        json.dump(results[:10], f, indent=2)
-
-    print("✅ Saved top10_drops.json with", len(results[:10]), "items")
+print(f"✅ Scraped and saved {len(drops[:10])} drops from Nice Kicks")
