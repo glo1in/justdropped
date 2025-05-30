@@ -10,7 +10,7 @@ response = requests.get(URL, headers=headers)
 soup = BeautifulSoup(response.text, "html.parser")
 
 results = []
-    for post in soup.select(".sneaker-release"):
+for post in soup.select("article.card-article"):
     name = post.select_one(".headline a")
     image = post.select_one("img")
     date = post.select_one(".release-date")
