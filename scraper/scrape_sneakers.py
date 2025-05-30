@@ -24,5 +24,7 @@ for post in soup.select(".release-list .post"):
 
 # Sort by soonest
 results.sort(key=lambda x: x['release_date'])
-    with open("top10_drops.json", "w") as f:
+
+# ✅ Output file now saved to project root
+with open("top10_drops.json", "w") as f:
     json.dump(results[:10], f, indent=2)
