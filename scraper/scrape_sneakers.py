@@ -333,3 +333,5 @@ class SneakerScraper:
 if __name__ == "__main__":
     scraper = SneakerScraper()
     scraper.run_scraper()
+import shutil
+shutil.copy("top10_drops.json", "public/top10_drops.json")
