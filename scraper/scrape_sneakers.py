@@ -335,3 +335,4 @@ if __name__ == "__main__":
     scraper.run_scraper()
 import shutil
 shutil.copy("top10_drops.json", "public/top10_drops.json")
+
