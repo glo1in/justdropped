@@ -1,7 +1,17 @@
-fetch('top10_drops.json')
-  .then(response => response.json())
+fetch('/top10_drops.json')
+  .then(response => {
+    if (!response.ok) {
+      throw new Error("Failed to fetch top10_drops.json");
+    }
+    return response.json();
+  })
   .then(drops => {
     const container = document.getElementById('drop-list');
+    if (!Array.isArray(drops) || drops.length === 0) {
+      container.innerHTML = '<p>No drops available.</p>';
+      return;
+    }
+
     drops.forEach(drop => {
       const card = document.createElement('div');
       card.className = 'drop-card';
@@ -14,16 +24,16 @@ fetch('top10_drops.json')
       `;
       container.appendChild(card);
     });
+  })
+  .catch(error => {
+    console.error("Error loading drop data:", error);
+    document.getElementById('drop-list').innerHTML = '<p>Error loading drops.</p>';
   });
 
 function subscribe(name, date) {
   const email = prompt("Enter your email to get alerts:");
   if (email) {
-    fetch('https://your-backend.com/subscribe', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, name, date })
-    });
-    alert("Subscribed!");
+    alert(`Subscribed for ${name} drop on ${new Date(date).toLocaleString()}`);
+    // Backend POST logic goes here
   }
 }
