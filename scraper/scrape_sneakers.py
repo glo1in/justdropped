@@ -1,33 +1,29 @@
-name: Hourly Sneaker Scraper
+import requests
+from bs4 import BeautifulSoup
+import json
+from datetime import datetime
 
-on:
-  schedule:
-    - cron: '0 * * * *'  # Every hour UTC
-  workflow_dispatch:
+URL = "https://sneakernews.com/release-dates/"
+headers = {"User-Agent": "Mozilla/5.0"}
 
-jobs:
-  run:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@v3
+response = requests.get(URL, headers=headers)
+soup = BeautifulSoup(response.text, "html.parser")
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.x'
+results = []
+for post in soup.select(".release-list .post"):
+    name = post.select_one(".headline a")
+    image = post.select_one("img")
+    date = post.select_one(".release-date")
+    if name and image and date:
+        results.append({
+            "name": name.get_text(strip=True),
+            "url": name['href'],
+            "image": image['src'],
+            "release_date": datetime.strptime(date.get_text(strip=True), "%B %d, %Y").isoformat()
+        })
 
-      - name: Install dependencies
-        run: pip install requests beautifulsoup4
+# Sort by soonest
+results.sort(key=lambda x: x['release_date'])
 
-      - name: Run scraper
-        run: python scraper/scrape_sneakers.py
-
-      - name: Commit and push
-        run: |
-          git config --global user.name 'GitHub Actions'
-          git config --global user.email 'actions@github.com'
-          git remote set-url origin https://x-access-token:${{ secrets.ACTIONS_DEPLOY_TOKEN }}@github.com/${{ github.repository }}
-          git add top10_drops.json
-          git commit -m 'Update top 10 drops [bot]' || echo "No changes"
-          git push
+with open("top10_drops.json", "w") as f:
+    json.dump(results[:10], f, indent=2)
