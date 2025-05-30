@@ -23,11 +23,11 @@ jobs:
       - name: Run scraper
         run: python scraper/scrape_sneakers.py
 
-      - name: Commit changes
+      - name: Commit and push
         run: |
           git config --global user.name 'GitHub Actions'
           git config --global user.email 'actions@github.com'
+          git remote set-url origin https://x-access-token:${{ secrets.ACTIONS_DEPLOY_TOKEN }}@github.com/${{ github.repository }}
           git add top10_drops.json
           git commit -m 'Update top 10 drops [bot]' || echo "No changes"
-          git remote set-url origin https://x-access-token:${{ secrets.ACTIONS_DEPLOY_TOKEN }}@github.com/${{ github.repository }}
           git push
