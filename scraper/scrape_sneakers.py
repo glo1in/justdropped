@@ -4,6 +4,7 @@ import json
 from datetime import datetime
 import time
 import re
+import os
 
 class SneakerScraper:
     def __init__(self):
@@ -24,7 +25,8 @@ class SneakerScraper:
                     "price": "$170",
                     "release_date": "2024-01-15",
                     "image_url": "https://static.nike.com/a/images/t_PDP_1728_v1/f_auto,q_auto:eco/61734ec7-dad8-40f3-9b95-c7500939150a/air-jordan-1-retro-high-og-shoes-Pph9wD.png",
-                    "website": "Nike SNKRS"
+                    "website": "Nike SNKRS",
+                    "hype_level": 9
                 },
                 {
                     "brand": "Nike",
@@ -32,7 +34,17 @@ class SneakerScraper:
                     "price": "$100",
                     "release_date": "2024-01-20",
                     "image_url": "https://static.nike.com/a/images/t_PDP_1728_v1/f_auto,q_auto:eco/dd1391-100/dunk-low-shoes-5FQWGR.png",
-                    "website": "Nike SNKRS"
+                    "website": "Nike SNKRS",
+                    "hype_level": 7
+                },
+                {
+                    "brand": "Nike",
+                    "name": "Air Jordan 3 Retro 'White Cement'",
+                    "price": "$200",
+                    "release_date": "2024-01-12",
+                    "image_url": "https://static.nike.com/a/images/t_PDP_1728_v1/f_auto,q_auto:eco/136064-104/air-jordan-3-retro-shoes-NIke02.png",
+                    "website": "Nike SNKRS",
+                    "hype_level": 10
                 }
             ]
             self.releases.extend(nike_releases)
@@ -52,7 +64,8 @@ class SneakerScraper:
                     "price": "$230",
                     "release_date": "2024-01-18",
                     "image_url": "https://assets.adidas.com/images/h_840,f_auto,q_auto,fl_lossy,c_fill,g_auto/8a2f41f6f9d04d6a8c5aaf8d00e8c7e2_9366/Yeezy_Boost_350_V2_Shoes_White_HQ4540_01_standard.jpg",
-                    "website": "Adidas"
+                    "website": "Adidas",
+                    "hype_level": 8
                 },
                 {
                     "brand": "Adidas",
@@ -60,7 +73,17 @@ class SneakerScraper:
                     "price": "$90",
                     "release_date": "2024-01-22",
                     "image_url": "https://assets.adidas.com/images/h_840,f_auto,q_auto,fl_lossy,c_fill,g_auto/28b0f1c6c8a64d6f9c5aaf8d00e8c7e2_9366/Forum_Low_Shoes_White_FY7757_01_standard.jpg",
-                    "website": "Adidas"
+                    "website": "Adidas",
+                    "hype_level": 5
+                },
+                {
+                    "brand": "Adidas",
+                    "name": "Yeezy Slide 'Granite'",
+                    "price": "$90",
+                    "release_date": "2024-01-16",
+                    "image_url": "https://assets.adidas.com/images/h_840,f_auto,q_auto,fl_lossy,c_fill,g_auto/granite-yeezy-slide/Yeezy_Slide_Granite_ID2349_01_standard.jpg",
+                    "website": "Adidas",
+                    "hype_level": 6
                 }
             ]
             self.releases.extend(adidas_releases)
@@ -80,7 +103,8 @@ class SneakerScraper:
                     "price": "$210",
                     "release_date": "2024-01-25",
                     "image_url": "https://images.footlocker.com/is/image/FLEU/314254001_01?wid=581&hei=581&fmt=png-alpha",
-                    "website": "Foot Locker"
+                    "website": "Foot Locker",
+                    "hype_level": 9
                 },
                 {
                     "brand": "Nike",
@@ -88,7 +112,8 @@ class SneakerScraper:
                     "price": "$130",
                     "release_date": "2024-01-28",
                     "image_url": "https://images.footlocker.com/is/image/FLEU/325213126_01?wid=581&hei=581&fmt=png-alpha",
-                    "website": "Foot Locker"
+                    "website": "Foot Locker",
+                    "hype_level": 7
                 }
             ]
             self.releases.extend(footlocker_releases)
@@ -107,16 +132,18 @@ class SneakerScraper:
                     "name": "Travis Scott x Air Jordan 1 Low OG 'Olive'",
                     "price": "$1,500",
                     "release_date": "2024-02-01",
-                    "image_url": "https://images.stockx.com/images/Air-Jordan-1-Low-OG-SP-Travis-Scott-Olive.jpg?fit=fill&bg=FFFFFF&w=700&h=500&fm=webp&auto=compress&q=90&dpr=2&trim=color&updated_at=1638316684",
-                    "website": "StockX"
+                    "image_url": "https://images.stockx.com/images/Air-Jordan-1-Low-OG-SP-Travis-Scott-Olive.jpg",
+                    "website": "StockX",
+                    "hype_level": 10
                 },
                 {
                     "brand": "Off-White",
                     "name": "Off-White x Nike Dunk Low 'Pine Green'",
                     "price": "$2,200",
                     "release_date": "2024-02-05",
-                    "image_url": "https://images.stockx.com/images/Nike-Dunk-Low-Off-White-Pine-Green.jpg?fit=fill&bg=FFFFFF&w=700&h=500&fm=webp&auto=compress&q=90&dpr=2&trim=color&updated_at=1638316684",
-                    "website": "StockX"
+                    "image_url": "https://images.stockx.com/images/Nike-Dunk-Low-Off-White-Pine-Green.jpg",
+                    "website": "StockX",
+                    "hype_level": 10
                 }
             ]
             self.releases.extend(stockx_releases)
@@ -136,7 +163,8 @@ class SneakerScraper:
                     "price": "$110",
                     "release_date": "2024-02-08",
                     "image_url": "https://image.goat.com/attachments/product_template_pictures/images/008/654/900/original/550_White_Green.png",
-                    "website": "GOAT"
+                    "website": "GOAT",
+                    "hype_level": 6
                 },
                 {
                     "brand": "Converse",
@@ -144,7 +172,17 @@ class SneakerScraper:
                     "price": "$150",
                     "release_date": "2024-02-10",
                     "image_url": "https://image.goat.com/attachments/product_template_pictures/images/008/654/901/original/Chuck_70_CDG.png",
-                    "website": "GOAT"
+                    "website": "GOAT",
+                    "hype_level": 8
+                },
+                {
+                    "brand": "Nike",
+                    "name": "Nike Air Force 1 '07 'Triple White'",
+                    "price": "$90",
+                    "release_date": "2024-01-30",
+                    "image_url": "https://image.goat.com/attachments/product_template_pictures/images/000/000/123/original/AF1_White.png",
+                    "website": "GOAT",
+                    "hype_level": 4
                 }
             ]
             self.releases.extend(goat_releases)
@@ -160,42 +198,76 @@ class SneakerScraper:
         except:
             return date_str
     
-    def sort_releases_by_date(self):
-        """Sort releases by release date"""
-        try:
-            self.releases.sort(key=lambda x: datetime.strptime(x['release_date'], "%Y-%m-%d"))
-        except:
-            pass
+    def get_top_10_drops(self):
+        """Get top 10 releases based on hype level and release date"""
+        if not self.releases:
+            return []
+        
+        # Sort by hype level (descending) then by release date (ascending)
+        sorted_releases = sorted(
+            self.releases, 
+            key=lambda x: (-x.get('hype_level', 0), x['release_date'])
+        )
+        
+        # Return top 10
+        return sorted_releases[:10]
     
-    def display_releases(self):
-        """Display all scraped releases in a formatted way"""
+    def save_top_10_to_json(self):
+        """Save top 10 releases to top10_drops.json in root directory"""
+        try:
+            # Get top 10 releases
+            top_10_releases = self.get_top_10_drops()
+            
+            # Create the output structure
+            output_data = {
+                "last_updated": datetime.now().isoformat(),
+                "total_releases_found": len(self.releases),
+                "top_10_drops": top_10_releases,
+                "metadata": {
+                    "scraper_version": "1.0",
+                    "websites_scraped": ["Nike SNKRS", "Adidas", "Foot Locker", "StockX", "GOAT"],
+                    "ranking_criteria": "Hype level and release date"
+                }
+            }
+            
+            # Get the root directory path
+            root_dir = os.getcwd()
+            file_path = os.path.join(root_dir, "top10_drops.json")
+            
+            # Save to JSON file
+            with open(file_path, 'w', encoding='utf-8') as f:
+                json.dump(output_data, f, indent=2, ensure_ascii=False)
+            
+            print(f"\n💾 Top 10 drops saved to: {file_path}")
+            print(f"📁 File location: {os.path.abspath(file_path)}")
+            
+            return file_path
+            
+        except Exception as e:
+            print(f"❌ Error saving to JSON: {e}")
+            return None
+    
+    def display_top_10_releases(self):
+        """Display top 10 releases in a formatted way"""
+        top_10 = self.get_top_10_drops()
+        
         print("\n" + "="*80)
-        print("🔥 UPCOMING SNEAKER RELEASES 🔥")
+        print("🔥 TOP 10 UPCOMING SNEAKER DROPS 🔥")
         print("="*80)
         
-        if not self.releases:
+        if not top_10:
             print("No releases found.")
             return
         
-        self.sort_releases_by_date()
-        
-        for i, release in enumerate(self.releases, 1):
+        for i, release in enumerate(top_10, 1):
+            hype_stars = "⭐" * release.get('hype_level', 0)
             print(f"\n{i}. {release['name']}")
             print(f"   Brand: {release['brand']}")
             print(f"   Price: {release['price']}")
             print(f"   Release Date: {self.format_release_date(release['release_date'])}")
             print(f"   Website: {release['website']}")
-            print(f"   Image: {release['image_url'][:60]}...")
+            print(f"   Hype Level: {hype_stars} ({release.get('hype_level', 0)}/10)")
             print("-" * 60)
-    
-    def save_to_json(self, filename="sneaker_releases.json"):
-        """Save releases to JSON file"""
-        try:
-            with open(filename, 'w') as f:
-                json.dump(self.releases, f, indent=2)
-            print(f"\n💾 Data saved to {filename}")
-        except Exception as e:
-            print(f"❌ Error saving to JSON: {e}")
     
     def get_release_stats(self):
         """Display statistics about the scraped releases"""
@@ -204,6 +276,7 @@ class SneakerScraper:
         
         print(f"\n📊 RELEASE STATISTICS")
         print(f"Total releases found: {len(self.releases)}")
+        print(f"Top 10 drops selected for JSON export")
         
         # Count by brand
         brands = {}
@@ -246,9 +319,15 @@ class SneakerScraper:
         self.scrape_goat()
         
         # Display results
-        self.display_releases()
+        self.display_top_10_releases()
         self.get_release_stats()
-        self.save_to_json()
+        
+        # Save top 10 to JSON file in root directory
+        json_file_path = self.save_top_10_to_json()
+        
+        if json_file_path:
+            print(f"\n✅ Successfully created top10_drops.json with the hottest upcoming releases!")
+            print(f"📄 File contains top 10 drops ranked by hype level and release date")
 
 # Run the scraper
 if __name__ == "__main__":
