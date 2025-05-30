@@ -3,36 +3,37 @@ from bs4 import BeautifulSoup
 import json
 from datetime import datetime
 
-URL = "https://sneakernews.com/release-dates/"
-headers = {"User-Agent": "Mozilla/5.0"}
+def scrape_sneakernews():
+    URL = "https://sneakernews.com/release-dates/"
+    headers = {"User-Agent": "Mozilla/5.0"}
+    response = requests.get(URL, headers=headers)
+    soup = BeautifulSoup(response.text, "html.parser")
 
-response = requests.get(URL, headers=headers)
-soup = BeautifulSoup(response.text, "html.parser")
+    drops = []
+    for post in soup.select("article"):
+        name = post.select_one("h2.headline a")
+        image = post.select_one("img")
+        date = post.select_one(".release-date")
 
-results = []
+        if name and image and date:
+            try:
+                parsed_date = datetime.strptime(date.get_text(strip=True), "%B %d, %Y")
+                drops.append({
+                    "name": name.get_text(strip=True),
+                    "url": name["href"],
+                    "image": image["src"],
+                    "release_date": parsed_date.isoformat()
+                })
+            except Exception:
+                continue
+    return drops
 
-# Update the selector based on the current HTML structure
-for post in soup.select("div.release-card"):
-    name_tag = post.select_one("h2.headline")
-    link_tag = post.select_one("a")
-    image_tag = post.select_one("img")
-    date_tag = post.select_one("div.release-date")
+# Run and save top 10 drops
+if __name__ == "__main__":
+    results = scrape_sneakernews()
+    results.sort(key=lambda x: x['release_date'])
 
-    if name_tag and link_tag and image_tag and date_tag:
-        try:
-            release_date = datetime.strptime(date_tag.get_text(strip=True), "%B %d, %Y")
-            results.append({
-                "name": name_tag.get_text(strip=True),
-                "url": link_tag['href'],
-                "image": image_tag['src'],
-                "release_date": release_date.isoformat()
-            })
-        except Exception as e:
-            print(f"Skipping due to error: {e}")
+    with open("top10_drops.json", "w") as f:
+        json.dump(results[:10], f, indent=2)
 
-# Sort by soonest release date
-results.sort(key=lambda x: x['release_date'])
-
-# Write the top 10 drops to a JSON file
-with open("top10_drops.json", "w") as f:
-    json.dump(results[:10], f, indent=2)
+    print("Saved top10_drops.json with", len(results[:10]), "entries")
