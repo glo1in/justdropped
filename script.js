@@ -30,3 +30,8 @@ fetch('/top10_drops.json')
     console.error("Error loading drop data:", error);
     document.getElementById('drop-list').innerHTML = '<p>Error loading drops.</p>';
   });
+
+function subscribe(name, date) {
+  const email = prompt("Enter your email to get alerts:");
+  if (email) {
+    alert(`Subscribed for ${name}
