@@ -34,4 +34,6 @@ fetch('/top10_drops.json')
 function subscribe(name, date) {
   const email = prompt("Enter your email to get alerts:");
   if (email) {
-    alert(`Subscribed for ${name}
+    alert(`Subscribed for ${name} on ${new Date(date).toLocaleString()}`);
+  }
+}
