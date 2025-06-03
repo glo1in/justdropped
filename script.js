@@ -1,14 +1,18 @@
 fetch('/top10_drops.json')
   .then(response => {
-    if (!response.ok) throw new Error("Failed to fetch JSON");
+    if (!response.ok) {
+      throw new Error(`Failed to fetch JSON: ${response.status}`);
+    }
     return response.json();
   })
   .then(drops => {
+    console.log("Loaded drops:", drops);
     const container = document.getElementById('drop-list');
     if (!Array.isArray(drops) || drops.length === 0) {
       container.innerHTML = '<p>No drops available.</p>';
       return;
     }
+
     drops.forEach(drop => {
       const card = document.createElement('div');
       card.className = 'drop-card';
@@ -26,10 +30,3 @@ fetch('/top10_drops.json')
     console.error("Error loading drop data:", error);
     document.getElementById('drop-list').innerHTML = '<p>Error loading drops.</p>';
   });
-
-function subscribe(name, date) {
-  const email = prompt("Enter your email to get alerts:");
-  if (email) {
-    alert(`Subscribed for ${name} on ${new Date(date).toLocaleString()}`);
-  }
-}
