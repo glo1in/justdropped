@@ -1,8 +1,6 @@
 fetch('/top10_drops.json')
   .then(response => {
-    if (!response.ok) {
-      throw new Error("Failed to fetch top10_drops.json");
-    }
+    if (!response.ok) throw new Error("Failed to fetch JSON");
     return response.json();
   })
   .then(drops => {
@@ -11,7 +9,6 @@ fetch('/top10_drops.json')
       container.innerHTML = '<p>No drops available.</p>';
       return;
     }
-
     drops.forEach(drop => {
       const card = document.createElement('div');
       card.className = 'drop-card';
@@ -33,7 +30,6 @@ fetch('/top10_drops.json')
 function subscribe(name, date) {
   const email = prompt("Enter your email to get alerts:");
   if (email) {
-    alert(`Subscribed for ${name} drop on ${new Date(date).toLocaleString()}`);
-    // Backend POST logic goes here
+    alert(`Subscribed for ${name} on ${new Date(date).toLocaleString()}`);
   }
 }
