@@ -232,7 +232,7 @@ class SneakerScraper:
             
             # Get the root directory path
             root_dir = os.getcwd()
-            file_path = os.path.join(root_dir, "top10_drops.json")
+            file_path = os.path.join(root_dir, "public/top10_drops.json")
             
             # Save to JSON file
             with open(file_path, 'w', encoding='utf-8') as f:
